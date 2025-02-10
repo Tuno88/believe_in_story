@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word-by-Word Animation</title>
+    <style>
+        body {
+            display: flex;
+            /* justify-content: center;
+            align-items: center; */
+            height: 100vh;
+            background-color: #121212;
+            color: white;
+            font-size: 2rem;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column; /* Đặt chữ và hàng ngang lên trên nhau */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hàng ngang với màu sắc di chuyển */
+        .line {
+            margin-top: 10vh;
+            width: 100%; /* Đảm bảo dòng chạy ngang qua toàn bộ chiều rộng */
+            height: 1vh;
+            background: linear-gradient(to right, #ff0000, #ff8000, #ffff00, #00ff00, #0080ff, #ff00ff);
+            background-size: 300% 100%; /* Tạo hiệu ứng chuyển động màu sắc */
+            animation: lineAnimation 5s linear infinite; /* Chạy animation */
+            margin-bottom: 20vh; /* Khoảng cách giữa hàng ngang và chữ */
+        }
+
+        /* Hiệu ứng cho hàng ngang */
+        @keyframes lineAnimation {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 0%; }
+        }
+
+        .text-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            margin-top: 30vh; /* Thay đổi giá trị này để đưa chữ lên gần phần trên */
+        }
+
+
+        .sentence {
+            position: absolute;
+            opacity: 0;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .sentence span {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s forwards, colorChange 2s infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes sentenceFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes colorChange {
+            0% { color: #ff0000; }
+            20% { color: #ff8000; }
+            40% { color: #ffff00; }
+            60% { color: #00ff00; }
+            80% { color: #0080ff; }
+            100% { color: #ff00ff; }
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="line"></div> Hàng ngang màu sắc -->
+    <div class="text-container" id="textContainer"></div>
+    <!-- <div class="line"></div> Hàng ngang màu sắc -->
+
+    <audio id="soundEffect" src="music.mp3" loop></audio> <!-- Đặt chế độ loop cho nhạc -->
+
+    <script>
+        const sentences = [
+            "The power of ideas",
+            "Ideas tamed fire",
+            "melted iron",
+            "and catapulted us",
+            "into the skies",
+            "Our ideas",
+            "Our intellect",
+            "our property",
+
+            "Intellectual property",
+            "is everywhere",
+
+            "It's not gold",
+            "it's not oil",
+            "it's not silicon",
+
+            "IP the most precious resource of our time",
+            "The power of IP",
+            "IP is your ideas",
+            "it's art",
+            "it's science",
+            "it's research",
+            "it's inventions",
+            "And AI",
+            "the most important innovation",
+            "of our generation",
+            "runs on the fuel of IP",
+            "Without IP",
+            "AI cannot exist",
+            "the power of IP",
+            "is at stake",
+            "Our ingenuity is",
+            "being squeezed",
+            "to powered trillion dollar monopolies",
+            "without compensation",
+            "Destroying the incentive",
+            "to create and invent",
+            "We need to reinvent IP itself",
+            "Create an open market for IP",
+            "own - exchange - MONETIZE your IP",
+
+            "IP 'the most valuable asset of the 21st century'",
+
+            "It's time for you to capture its worth",
+            "Story",
+            "Hello world!",
+            "This is an awesome animation!",
+            "Enjoy the colorful effect!",
+            "Watch each word appear!",
+            "Then the whole sentence fades out!"
+        ];
+
+        let currentSentence = 0;
+        const textContainer = document.getElementById("textContainer");
+        const soundEffect = document.getElementById("soundEffect");
+        
+        soundEffect.play();
+
+        function displaySentence(index) {
+            textContainer.innerHTML = "";
+
+            let sentenceDiv = document.createElement("div");
+            sentenceDiv.classList.add("sentence");
+            textContainer.appendChild(sentenceDiv);
+
+            let words = sentences[index].split(" ");
+            words.forEach((word, i) => {
+                let span = document.createElement("span");
+                span.textContent = word;
+                span.style.animationDelay = `${i * 0.3}s`;
+                sentenceDiv.appendChild(span);
+            });
+
+            sentenceDiv.style.opacity = "1";
+
+            setTimeout(() => {
+                sentenceDiv.style.animation = "sentenceFadeOut 1s forwards";
+                setTimeout(() => {
+                    currentSentence = (currentSentence + 1) % sentences.length;
+                    displaySentence(currentSentence);
+                }, 1000);
+            }, words.length * 300 + 2000);
+        }
+
+        displaySentence(currentSentence);
+    </script>
+</body>
+</html>
